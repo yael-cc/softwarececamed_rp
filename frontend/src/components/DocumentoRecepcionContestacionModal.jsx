@@ -53,6 +53,20 @@ const DocumentoRecepcionContestacionModal = ({ isOpen, onClose, item }) => {
     setLocalData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleSave = async () => {
+    setLoading(true);
+    const toastId = toast.loading('Guardando datos del documento...');
+    try {
+      await AtendidosService.updateDatosDocs(item.id, formData);
+      toast.success('Datos guardados correctamente', { id: toastId });
+    } catch (error) {
+      console.error("Error guardando datos_docs:", error);
+      toast.error('Error al guardar. Verifica tu conexión.', { id: toastId });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleGeneratePDF = async () => {
     setGenerando(true);
     const toastId = toast.loading('Guardando y generando Auto de Recepción...');
@@ -68,7 +82,7 @@ const DocumentoRecepcionContestacionModal = ({ isOpen, onClose, item }) => {
         ...localData 
       };
       
-      generarPDFRecepcionContestacion(expActualizado, "previsualizar");
+      generarPDFRecepcionContestacion(expActualizado);
       
       toast.success('Auto generado exitosamente', { id: toastId });
     } catch (error) {
@@ -191,6 +205,15 @@ const DocumentoRecepcionContestacionModal = ({ isOpen, onClose, item }) => {
           >
             <Eye size={16} />
             Vista Previa
+          </button>
+
+          <button 
+            onClick={handleSave}
+            disabled={loading || generando}
+            className="px-5 py-2.5 bg-slate-800 text-white hover:bg-slate-900 rounded-xl font-bold text-sm transition-all shadow-sm flex items-center gap-2 active:scale-95 disabled:opacity-70"
+          >
+            <Save size={16} />
+            {loading ? 'Guardando...' : 'Guardar Oficio'}
           </button>
 
           <button 

@@ -110,7 +110,7 @@ const DocumentosAudienciaModal = ({ isOpen, onClose, item }) => {
         ...localData // Mandamos la fecha_documento, fecha_queja y titular efímeros
       };
       
-      generarPDFAudienciaInformativa(expActualizado, "previsualizar");
+      generarPDFAudienciaInformativa(expActualizado);
       
       toast.success('Oficio generado exitosamente', { id: toastId });
     } catch (error) {
